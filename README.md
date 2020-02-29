@@ -37,5 +37,5 @@ API_KEY="abc1212"
 Run the program 
 
 ```py
-python robo.py
+python app/robo.py
 ```

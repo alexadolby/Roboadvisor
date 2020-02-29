@@ -12,14 +12,17 @@ load_dotenv()
 def to_usd(my_price):
     return "${0:,.2f}".format(my_price)
 
-api_key = os.envioron.get("API_KEY")
+apikey = os.environ.get("API_KEY", "demo")
 
-symbol = "MSFT" # accept user input
+symbol = "MSFT"
 
-request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}"
+#while True:
+       # symbol = input("Please input a stock symbol") # accept user input
+       # if 
 
+
+request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={apikey}"
 response = requests.get(request_url)
-
 parsed_response = json.loads(response.text)
 
 last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
@@ -64,10 +67,17 @@ with open(csv_file_path, "w") as csv_file: # "w" means "open the file for writin
             "volume": daily_prices["5. volume"]
         })
 
+calc = recent_low*1.2
 
+if float(latest_close) < float(calc):
+		rec_sum = "Buy!"
+		rec_exp = "The latest close is less than 20% above the recent low." 
+else:
+		rec_sum = "Sell!"
+		rec_exp = "The latest close is more than 20% above the recent low." 
 
 print("-------------------------")
-print("SELECTED SYMBOL: MSFT")
+print(f"SELECTED SYMBOL: {symbol}")
 print("-------------------------")
 print("REQUESTING STOCK MARKET DATA...")
 now = datetime.datetime.now()
@@ -78,8 +88,8 @@ print(f"LATEST CLOSE: {to_usd(float(latest_close))}")
 print(f"RECENT HIGH: {to_usd(float(recent_high))}")
 print(f"RECENT LOW: {to_usd(float(recent_low))}")
 print("-------------------------")
-print("RECOMMENDATION: BUY!")
-print("RECOMMENDATION REASON: TODO")
+print(f"RECOMMENDATION: {rec_sum}")
+print(f"RECOMMENDATION REASON: {rec_exp}")
 print("-------------------------")
 print(f"WRITING DATA TO CSV: {csv_file_path}")
 print("-------------------------")
