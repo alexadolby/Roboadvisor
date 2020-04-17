@@ -20,5 +20,5 @@ def test_to_usd():
     assert result == "$3.67"
 
     # display thousand separators
-    result = to_usd(111222333.445)
+    result = to_usd(111222333.45)
     assert result == "$111,222,333.45"
