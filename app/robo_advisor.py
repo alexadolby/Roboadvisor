@@ -3,10 +3,10 @@
 import csv
 import json
 import os
-
 from dotenv import load_dotenv
 import requests
 import datetime 
+
 load_dotenv()
 
 def to_usd(my_price):
@@ -16,7 +16,7 @@ apikey = os.environ.get("API_KEY", "demo")
 
 global symbol
 symbol = ""
-symbol = input("Please input a stock symbol: ") 
+symbol = input("Please input a stock symbol(ex. MSFT): ") 
 if len(symbol) < 1:
 	print("Symbol seems too short. Please try again")
 elif len(symbol) > 6: # 6 seems to be the max length of a ticker: https://www.quora.com/Whats-the-shortest-and-the-longest-that-a-companys-ticker-can-be-on-a-stock-market-exchange
@@ -52,6 +52,10 @@ for date in dates:
 recent_high = max(high_prices)
 recent_low = min(low_prices)
 
+def line():
+    print("-" * 60)
+
+#Write to CSV
 
 #csv_file_path = "data/prices.csv" # a relative filepath
 csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
@@ -72,6 +76,8 @@ with open(csv_file_path, "w") as csv_file: # "w" means "open the file for writin
             "volume": daily_prices["5. volume"]
         })
 
+# Recommendation 
+
 calc = recent_low*1.2
 
 if float(latest_close) < float(calc):
@@ -81,22 +87,23 @@ else:
 		rec_sum = "Sell!"
 		rec_exp = "The latest close is more than 20% above the recent low." 
 
-print("-------------------------")
+# Results
+
+line()
 print(f"SELECTED SYMBOL: {symbol}")
-print("-------------------------")
+line()
 print("REQUESTING STOCK MARKET DATA...")
 now = datetime.datetime.now()
-print("REQUEST AT: " + now.strftime("%Y-%m-%d, %I:%M %p")) #https://www.programiz.com/python-programming/datetime/strftimeprint("REQUEST AT: 2018-02-20 02:00pm")
-print("-------------------------")
+line()
 print(f"LATEST DAY: {last_refreshed}")
 print(f"LATEST CLOSE: {to_usd(float(latest_close))}")
 print(f"RECENT HIGH: {to_usd(float(recent_high))}")
 print(f"RECENT LOW: {to_usd(float(recent_low))}")
-print("-------------------------")
+line()
 print(f"RECOMMENDATION: {rec_sum}")
 print(f"RECOMMENDATION REASON: {rec_exp}")
-print("-------------------------")
+line()
 print(f"WRITING DATA TO CSV: {csv_file_path}")
-print("-------------------------")
+line()
 print("HAPPY INVESTING!")
-print("-------------------------")
+line()

@@ -39,3 +39,17 @@ Run the program
 ```py
 python app/robo.py
 ```
+
+## Testing 
+
+Install the pytest package (first time only):
+
+```sh
+pip install pytest
+```
+
+Run tests:
+
+```sh
+pytest
+```
