@@ -14,8 +14,21 @@ def to_usd(my_price):
 
 apikey = os.environ.get("API_KEY", "demo")
 
+#recommendation
+
+def recommendation(latest_close,recent_low):
+    calc = recent_low*1.2
+    if float(latest_close) < float(calc):
+		    rec_sum = "Buy!"
+		    rec_exp = "The latest close is less than 20% above the recent low." 
+    else:
+		    rec_sum = "Sell!"
+		    rec_exp = "The latest close is more than 20% above the recent low." 
+
+
 if __name__ == "__main__":
 
+    #user inputs stock symbol 
     global symbol
     symbol = ""
     symbol = input("Please input a stock symbol(ex. MSFT): ") 
@@ -26,7 +39,7 @@ if __name__ == "__main__":
     elif IndexError:
                     print("Please try again, symbol not found")
                     exit()
-
+                    # When user inputs incorrect symbol they will be prompted to try again
 
     request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={apikey}"
     response = requests.get(request_url)
@@ -39,8 +52,6 @@ if __name__ == "__main__":
     dates = list(tsd.keys())
 
     latest_day = dates[0]
-
-
     latest_close = tsd[latest_day]["4. close"]
     high_prices = []
     low_prices = []
@@ -56,6 +67,8 @@ if __name__ == "__main__":
 
     def line():
         print("-" * 60)
+        # prints lines in output
+
 
     #Write to CSV
 
@@ -78,17 +91,7 @@ if __name__ == "__main__":
                 "volume": daily_prices["5. volume"]
             })
 
-    # Recommendation 
-
-    calc = recent_low*1.2
-
-    if float(latest_close) < float(calc):
-		    rec_sum = "Buy!"
-		    rec_exp = "The latest close is less than 20% above the recent low." 
-    else:
-		    rec_sum = "Sell!"
-		    rec_exp = "The latest close is more than 20% above the recent low." 
-
+   
     # Results
 
     line()
